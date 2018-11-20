@@ -1,0 +1,13 @@
+{
+  "name": "Instagram",
+  "version": "0.5.4",
+  "dependencies": {
+    "express": "^4.16.3",
+    "omxplayer": "^1.0.0",
+    "onoff": "^1.2.0",
+    "request": "^2.85.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
