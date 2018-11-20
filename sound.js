@@ -1,20 +1,20 @@
-let api = require('./api');
-
 let Omx = require('node-omxplayer');
 
 let sounds = [];
 
-exports.play = function (name) {
+exports.init = function (sound0) {
 
-    api.broadcastLog('play ' + name);
+    let omxplayer = Omx('/home/pi/instagram/sounds/' + sound0, 'local', true, 0);
+    sounds.push(omxplayer);
+};
+
+exports.play = function (name) {
 
     let omxplayer = Omx('/home/pi/instagram/sounds/' + name);
     sounds.push(omxplayer);
 };
 
 exports.play = function (name, volume) {
-
-    api.broadcastLog('play ' + name);
 
     let omxplayer = Omx('/home/pi/instagram/sounds/' + name, 'local', false, volume);
     sounds.push(omxplayer);

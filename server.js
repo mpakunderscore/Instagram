@@ -6,16 +6,15 @@ app.use('/', express.static(__dirname) + '/web');
 
 let server = require('http').Server(app);
 
-let io = require('socket.io')(server);
-
 const socketPort = 8080;
 
-server.listen(socketPort, () => console.log('socket listening on: ' + socketPort));
+server.listen(socketPort, () => console.log('listening on: ' + socketPort));
 
-let api = require('./server/api')(io);
+let sound0 = 'ufo.mp3';
+let sound26 = 'failed.mp3';
 
-let timer = require('./server/timer');
+let gpio = require('./gpio');
+gpio.init(sound26);
 
-let gpio = require('./server/gpio');
-
-gpio.initGPIO();
+let sound = require('./sound');
+sound.init(sound0);

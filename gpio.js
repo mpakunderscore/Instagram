@@ -1,82 +1,24 @@
-let data = require('./data');
-
-let scenario = require('./scenario');
-
-let api = require('./api');
+let sound = require('./sound');
 
 let Gpio = require('onoff').Gpio;
 
 exports.pins = {};
 
-exports.resetGPIO = function () {
+let pinsArray = [5, 6, 12, 13, 16, 19, 20, 21];
 
-    for (let i in exports.pins) {
+exports.init = function (sound26) {
 
-        // if (exports.pins[i].type)
-        //     exports.pins[i].state = data.gpioState[i].state;
-
-        exports.pins[i].state = data.gpioState[i].state;
-
-        if (exports.pins[i].type) {
-            exports.pins[i].interface.writeSync(exports.pins[i].state ? 0 : 1);
-        }
+    for (let i = 0; i < pinsArray.length; i++) {
+        exports.pins[pinsArray[i]] = 0;
+        let button5 = new Gpio(pinsArray[i], 'out');
+        button5.writeSync(exports.pins[pinsArray[i]]);
     }
-}
 
-exports.initGPIO = function () {
+    let sound2 = new Gpio(26, 'in', 'both');
 
-    api.broadcastLog('init gpio')
+    sound2.watch(function (err, value) {
 
-    // exports.pins = {};
-
-    for (let i in data.gpioState) {
-
-        let id = data.gpioState[i].id;
-
-        exports.pins[id] = {};
-
-        exports.pins[id].id = data.gpioState[i].id;
-
-        exports.pins[id].pid = data.gpioState[i].pid;
-
-        exports.pins[id].name = data.gpioState[i].name;
-
-        exports.pins[id].type = data.gpioState[i].type;
-
-        exports.pins[id].state = data.gpioState[i].state;
-
-        exports.pins[id].interface = exports.pins[id].type ? new Gpio(exports.pins[id].pid, 'out') : new Gpio(exports.pins[id].pid, 'in', 'both');
-
-        if (!exports.pins[id].type) {
-
-            exports.pins[id].interface.watch(function (err, value) {
-
-                if (exports.pins[id].state === null)
-                    return;
-
-                exports.pins[id].state = (value === 0);
-
-                api.broadcastState(id);
-
-                // console.log(exports.pins[id].id + ' | ' + exports.pins[id].pid + ' | ' + value + ' | ' + exports.pins[id].state);
-
-                scenario.checkScenario();
-            })
-
-        } else {
-
-            // console.log(exports.pins[id]);
-            exports.pins[id].interface.writeSync(exports.pins[id].state ? 0 : 1);
-        }
-    }
-};
-
-exports.changeInterface = function (id) {
-    console.log('changeInterface: ' + id);
-    exports.pins[id].interface.writeSync(exports.pins[id].state ? 0 : 1);
-};
-
-exports.initInterface = function (id) {
-    console.log('initInterface: ' + id);
-    exports.pins[id].state = (exports.pins[id].interface.readSync() === 0);
+        if (value === 0)
+            sound.play(sound26)
+    });
 };
