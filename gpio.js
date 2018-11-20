@@ -2,16 +2,18 @@ let sound = require('./sound');
 
 let Gpio = require('onoff').Gpio;
 
-exports.pins = {};
-
 let pinsArray = [5, 6, 12, 13, 16, 19, 20, 21];
+
+let buttons = {};
+
+exports.pins = {};
 
 exports.init = function (sound26) {
 
     for (let i = 0; i < pinsArray.length; i++) {
         exports.pins[pinsArray[i]] = 0;
-        let button5 = new Gpio(pinsArray[i], 'out');
-        button5.writeSync(exports.pins[pinsArray[i]]);
+        buttons[pinsArray[i]] = new Gpio(pinsArray[i], 'out');
+        buttons[pinsArray[i]].writeSync(0);
     }
 
     let sound2 = new Gpio(26, 'in', 'both');
@@ -21,4 +23,10 @@ exports.init = function (sound26) {
         if (value === 0)
             sound.play(sound26)
     });
+};
+
+exports.pin = function (id, value) {
+
+    exports.pins[id] = value;
+    buttons[id].writeSync(value);
 };
