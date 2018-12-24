@@ -9,8 +9,8 @@ let server = require('http').Server(app);
 const port = 8080;
 server.listen(port);
 
-let sound0 = 'ufo.mp3';
-let sound26 = 'failed.mp3';
+let sound0 = 'barocko.mp3';
+let sound26 = 'like.mp3';
 
 let gpio = require('./gpio');
 gpio.init(sound26);
