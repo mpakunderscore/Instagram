@@ -4,7 +4,7 @@ let sounds = [];
 
 exports.init = function (sound0) {
 
-    let omxplayer = Omx('/home/pi/instagram/sounds/' + sound0, 'local', true, 0);
+    let omxplayer = Omx('/home/pi/instagram/sounds/' + sound0, 'local', true, -1000);
     sounds.push(omxplayer);
 };
 
